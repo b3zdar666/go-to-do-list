@@ -47,3 +47,17 @@ func (ts *TaskStore) ReadTask(id int) (Task, bool) {
 
 	return task, ok
 }
+
+func (ts *TaskStore) DeleteTask(taskToDelete Task) bool {
+	ts.mu.Lock()
+	defer ts.mu.Unlock()
+
+	_, ok := ts.tasks[taskToDelete.ID]
+	if !ok {
+		return false
+	}
+
+	delete(ts.tasks, taskToDelete.ID)
+
+	return true
+}
